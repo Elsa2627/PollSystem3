@@ -5,7 +5,6 @@ import com.yourcompany.pollservice.repository.PollQuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PollQuestionService {
@@ -17,9 +16,6 @@ public class PollQuestionService {
         this.pollQuestionRepository = pollQuestionRepository;
     }
 
-    public Optional<PollQuestion> getQuestionByTitle(String title) {
-        return pollQuestionRepository.findByTitle(title);
-    }
 
     public List<PollQuestion> searchQuestionsByKeyword(String keyword) {
         return pollQuestionRepository.findByTitleContaining(keyword);

@@ -2,7 +2,9 @@ package com.yourcompany.pollservice.controller;
 
 import com.yourcompany.pollservice.dto.PollQuestionDto;
 import com.yourcompany.pollservice.model.PollQuestion;
+import com.yourcompany.pollservice.model.QuestionStatistics;
 import com.yourcompany.pollservice.service.PollService;
+import com.yourcompany.pollservice.service.StatisticsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +18,27 @@ import java.util.Map;
 public class PollController {
 
     private final PollService pollService;
+    private StatisticsService statisticsService;
 
     @Autowired
-    public PollController(PollService pollService) {
+    public PollController(PollService pollService, StatisticsService statisticsService) {
         this.pollService = pollService;
     }
 
-    // Endpoint pour créer une question via DTO
+
     @PostMapping("/questions/create")
     public ResponseEntity<PollQuestion> createQuestion(@Valid @RequestBody PollQuestionDto pollQuestionDto) {
         PollQuestion newQuestion = pollService.createQuestion(pollQuestionDto);
         return ResponseEntity.ok(newQuestion);
     }
 
-    // Autres endpoints
+
+    @GetMapping("/statistics/{questionId}")
+    public ResponseEntity<QuestionStatistics> getQuestionStatistics(@PathVariable Long questionId) {
+        QuestionStatistics statistics = statisticsService.getStatisticsForQuestion(questionId); // Utilisez l'instance de statisticsService
+        return ResponseEntity.ok(statistics);
+    }
+
     @GetMapping("/questions")
     public ResponseEntity<List<PollQuestion>> getAllQuestions() {
         List<PollQuestion> questions = pollService.getAllQuestions();
